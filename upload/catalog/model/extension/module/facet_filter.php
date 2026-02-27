@@ -163,7 +163,7 @@ class ModelExtensionModuleFacetFilter extends Model {
 				md.name AS filter_name,
 				m.sort_order AS sort_order 
 			FROM " . DB_PREFIX . "product p
-			JOIN oc_manufacturer m
+			JOIN " . DB_PREFIX . "manufacturer m
 				ON m.manufacturer_id = p.manufacturer_id
 			JOIN " . DB_PREFIX . "manufacturer_description md
 				ON md.manufacturer_id = p.manufacturer_id
