@@ -137,9 +137,17 @@ class ModelExtensionModuleFacetFilter extends Model {
 			SELECT
 				pa.attribute_group_id AS filter_group_id,
 				pa.attribute_id AS filter_id,
+				ag2s.sort_order AS group_sort_order,
+				a2s.sort_order AS filter_sort_order,
 				agd.name AS group_name,
 				ad.name AS filter_name
 			FROM " . DB_PREFIX . "product_attribute pa
+			JOIN " . DB_PREFIX . "attribute_to_store a2s
+				ON a2s.attribute_id = pa.attribute_id
+				AND a2s.store_id = '" . (int) $this->config->get('config_store_id') . "'
+			JOIN " . DB_PREFIX . "attribute_group_to_store ag2s
+				ON ag2s.attribute_group_id = pa.attribute_group_id
+				AND ag2s.store_id = '" . (int) $this->config->get('config_store_id') . "'
 			JOIN " . DB_PREFIX . "attribute_description ad
 				ON ad.attribute_id = pa.attribute_id
 				AND ad.language_id = '" . (int) $this->config->get('config_language_id') . "'
@@ -154,16 +162,27 @@ class ModelExtensionModuleFacetFilter extends Model {
 
 		foreach ($query->rows as $row) {
 			$result[$row['filter_group_id']] = [
-				'group_name' 			=> $row['group_name'],
-				'filter_group_id' => $row['filter_group_id'],
+				'group_name' 				=> $row['group_name'],
+				'filter_group_id' 	=> $row['filter_group_id'],
+				'group_sort_order' 	=> $row['group_sort_order'],
 			];
 		}
 
 		foreach ($query->rows as $row) {
 			$result[$row['filter_group_id']]['filters'][$row['filter_id']] = [
-				'filter_id' => $row['filter_id'],
-				'name' 			=> $row['filter_name']
+				'filter_id' 					=> $row['filter_id'],
+				'name' 								=> $row['filter_name'],
+				'filter_sort_order' 	=> $row['filter_sort_order'],
 			];
+		}
+
+		if (!empty($result)) {	
+			usort($result, fn ($a, $b) =>  $a['group_sort_order'] <=> $b['group_sort_order'] );
+			foreach ($result as &$group) {
+				if (isset($group['filters'])) {
+					usort(array: $group['filters'], callback: fn ($a, $b) =>  $a['filter_sort_order'] <=> $b['filter_sort_order'] );
+				}
+			}
 		}
 
 		return $result;
