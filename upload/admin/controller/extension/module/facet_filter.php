@@ -22,7 +22,7 @@ class ControllerExtensionModuleFacetFilter extends Controller {
 			foreach ($this->request->post['module_facet_filter_settings']['category'] ?? [] as $category_id => $category) {
 				foreach ($languages as $language) {
 					$language_id = $language['language_id'];
-					$cacheName = "category.store_{$store_id}.language_{$language_id}." . (floor($category_id / 100)) . ".filters_{$category_id}";
+					$cacheName = "category.store_{$store_id}.language_{$language_id}." . (floor($category_id / 100)) . "00.filters_{$category_id}";
 					$this->cache->delete($cacheName);
 				}
 			}
@@ -34,7 +34,7 @@ class ControllerExtensionModuleFacetFilter extends Controller {
 					if (!isset($this->request->post['module_facet_filter_settings']['category'][$category_id])) {
 						foreach ($languages as $language) {
 							$language_id = $language['language_id'];
-							$cacheName = "category.store_{$store_id}.language_{$language_id}." . (floor($category_id / 100)) . ".filters_{$category_id}";
+							$cacheName = "category.store_{$store_id}.language_{$language_id}." . (floor($category_id / 100)) . "00.filters_{$category_id}";
 							$this->cache->delete($cacheName);
 						}
 					}
