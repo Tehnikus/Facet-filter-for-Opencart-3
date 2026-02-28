@@ -6,7 +6,7 @@ class ModelExtensionModuleFacetFilter extends Model {
 			return false;
 		}
 
-    $query = $this->db->query("
+    $sql = "
       SELECT c2s.category_id AS category_id
       FROM " . DB_PREFIX . "category_to_store c2s
       JOIN " . DB_PREFIX . "category c
@@ -14,7 +14,9 @@ class ModelExtensionModuleFacetFilter extends Model {
       WHERE c2s.category_id = '" . (int) $category_id . "'
 				AND c2s.store_id = '" . (int) $this->config->get('config_store_id') . "'
       LIMIT 1
-    ");
+    ";
+
+		$query = $this->db->query($sql);
 
     if ($query->row['category_id']) {
       return true;
@@ -27,13 +29,15 @@ class ModelExtensionModuleFacetFilter extends Model {
 		if ($category_id === null) {
 			return $result;
 		}
-		$query = $this->db->query("
+		$sql = "
 			SELECT
 				p2c.product_id AS product_id
 			FROM " . DB_PREFIX . "product_to_category p2c
 			WHERE p2c.category_id = '" . (int) $category_id . "'
 				AND p2c.store_id = '" . (int) $this->config->get('config_store_id') . "'
-		");
+		";
+
+		$query = $this->db->query($sql);
 
 		foreach ($query->rows as $row) {
 			$result[] = $row['product_id'];
@@ -45,7 +49,7 @@ class ModelExtensionModuleFacetFilter extends Model {
 	public function getSpecialProducts() : array {
 		$result = [];
 
-		$query = $this->db->query("
+		$sql = "
 			SELECT 
 				product_id
 			FROM " . DB_PREFIX . "product_special
@@ -55,7 +59,9 @@ class ModelExtensionModuleFacetFilter extends Model {
 				product_id
 			FROM " . DB_PREFIX . "product_discount
 			WHERE store_id = '" . (int) $this->config->get('config_store_id') . "'
-		");
+		";
+
+		$query = $this->db->query($sql);
 
 		foreach ($query->rows as $row) {
 			$result[] = $row['product_id'];
@@ -71,7 +77,7 @@ class ModelExtensionModuleFacetFilter extends Model {
 			return $result;
 		}
 
-		$query = $this->db->query("
+		$sql = "
 			SELECT
 				pov.option_id AS filter_group_id,
 				pov.option_value_id AS filter_id,
@@ -96,7 +102,9 @@ class ModelExtensionModuleFacetFilter extends Model {
 				AND ovd.store_id = '" . (int) $this->config->get('config_store_id') . "'
 			WHERE pov.product_id IN(" . implode(',', $products) . ")
 			GROUP BY filter_id
-		");
+		";
+
+		$query = $this->db->query($sql);
 
 		foreach ($query->rows as $row) {
 			$result[$row['filter_group_id']] = [
@@ -133,7 +141,7 @@ class ModelExtensionModuleFacetFilter extends Model {
 			return $result;
 		}
 
-		$query = $this->db->query("
+		$sql ="
 			SELECT
 				pa.attribute_group_id AS filter_group_id,
 				pa.attribute_id AS filter_id,
@@ -158,7 +166,9 @@ class ModelExtensionModuleFacetFilter extends Model {
 				AND agd.store_id = '" . (int) $this->config->get('config_store_id') . "'
 			WHERE pa.product_id IN(" . implode(',', $products) . ")
 			GROUP BY filter_id
-		");
+		";
+
+		$query = $this->db->query($sql);
 
 		foreach ($query->rows as $row) {
 			$result[$row['filter_group_id']] = [
@@ -195,7 +205,7 @@ class ModelExtensionModuleFacetFilter extends Model {
 			return $result;
 		}
 
-		$query = $this->db->query("
+		$sql = "
 			SELECT
 				p.manufacturer_id AS filter_id,
 				md.name AS filter_name,
@@ -209,7 +219,9 @@ class ModelExtensionModuleFacetFilter extends Model {
 				AND md.store_id = '" . (int) $this->config->get('config_store_id') . "'
 			WHERE p.product_id IN(" . implode(',', $products) . ")
 			GROUP BY filter_id
-		");
+		";
+
+		$query = $this->db->query($sql);
 
 		foreach ($query->rows as $row) {
 			$result[0]['filters'][$row['filter_id']] = [
@@ -303,7 +315,7 @@ class ModelExtensionModuleFacetFilter extends Model {
 			return $result;
 		}
 
-		$query = $this->db->query("
+		$sql = "
 			SELECT
 				pf.filter_id AS filter_id,
 				pf.filter_group_id AS filter_group_id,
@@ -328,7 +340,9 @@ class ModelExtensionModuleFacetFilter extends Model {
 				AND fgd.store_id = '" . (int) $this->config->get('config_store_id') . "'
 			WHERE pf.product_id IN(" . implode(',', $products) . ")
 				AND pf.store_id = '" . (int) $this->config->get('config_store_id') . "'
-		");
+		";
+
+		$query = $this->db->query($sql);
 
 		foreach ($query->rows as $row) {
 			$result[$row['filter_group_id']] = [
