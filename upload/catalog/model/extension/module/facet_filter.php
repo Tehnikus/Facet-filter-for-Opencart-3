@@ -100,9 +100,9 @@ class ModelExtensionModuleFacetFilter extends Model {
 
 		foreach ($query->rows as $row) {
 			$result[$row['filter_group_id']] = [
-				'group_name' => $row['group_name'],
-				'filter_group_id' => $row['filter_group_id'],
-				'group_sort_order' => $row['group_sort_order'],
+				'group_name' 				=> $row['group_name'],
+				'filter_group_id' 	=> $row['filter_group_id'],
+				'group_sort_order' 	=> $row['group_sort_order'],
 			];
 		}
 
@@ -118,7 +118,7 @@ class ModelExtensionModuleFacetFilter extends Model {
 			usort($result, fn ($a, $b) =>  $a['group_sort_order'] <=> $b['group_sort_order'] );
 			foreach ($result as &$group) {
 				if (isset($group['filters'])) {
-					usort(array: $group['filters'], callback: fn ($a, $b) =>  $b['filter_sort_order'] <=> $a['filter_sort_order'] );
+					usort(array: $group['filters'], callback: fn ($a, $b) =>  $a['filter_sort_order'] <=> $b['filter_sort_order'] );
 				}
 			}
 		}
