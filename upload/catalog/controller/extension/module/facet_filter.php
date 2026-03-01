@@ -124,7 +124,12 @@ class ControllerExtensionModuleFacetFilter extends Controller {
 
 			case 'product/search':
 				// Get search products
-				$products = $this->model_extension_module_facet_filter->getSearchProducts();
+				$this->load->model('catalog/product');
+				$products = [];
+				$searchProducts = $this->model_catalog_product->getProducts($this->request->get['search'] ?? null) ?? [];
+				foreach ($searchProducts as $product) {
+					$products[] = $product['product_id'];
+				}
 				// Get filters
 				$filters = $this->model_extension_module_facet_filter->getFiltersByProductSet($products);
 			break;
