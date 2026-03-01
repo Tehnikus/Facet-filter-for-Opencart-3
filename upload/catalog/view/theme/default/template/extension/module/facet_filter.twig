@@ -1,18 +1,20 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
-    {{ heading_title }}
-  </div>
-  <div> 
-    {% for filter_set_name, filter_set in filter_sets %}
-      {% for filter_group in filter_set %}
-        <h4>{{filter_group.group_name}}</h4>
-        {% for filter_val in filter_group.filters %}
-          <a href="{{ filter_val.href }}">
-            <input type="checkbox" value="{{ filter.filter_id }}" {% if filter_val.filter_id in requests[filter_set_name] %} checked="checked" {% endif %} />
-            {{ filter_val.name }}
-          </a>
+{% if filter_sets %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      {{ heading_title }}
+    </div>
+    <div> 
+      {% for filter_set_name, filter_set in filter_sets %}
+        {% for filter_group in filter_set %}
+          <h4>{{filter_group.group_name}}</h4>
+          {% for filter_val in filter_group.filters %}
+            <a href="{{ filter_val.href }}">
+              <input type="checkbox" value="{{ filter.filter_id }}" {% if filter_val.filter_id in requests[filter_set_name] %} checked="checked" {% endif %} />
+              {{ filter_val.name }}
+            </a>
+          {% endfor %}
         {% endfor %}
       {% endfor %}
-    {% endfor %}
+    </div>
   </div>
-</div>
+{% endif %}

@@ -193,6 +193,8 @@ class ControllerExtensionModuleFacetFilter extends Controller {
 				'manufacturer_id' 	=> (isset($settings['manufacturer']['show_manufacturers'])) 	? $manufacturers : [],
 			];
 		}
+		
+		$filterSets = array_filter($filterSets);
 
 		return $filterSets;
 	}
