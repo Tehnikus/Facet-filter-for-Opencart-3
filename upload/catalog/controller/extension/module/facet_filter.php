@@ -17,8 +17,8 @@ class ControllerExtensionModuleFacetFilter extends Controller {
 		$category_id 	= end($category_id) ?? null;
 		
 		// Interface data
-		if (isset($settings['cache']) && $settings['cache'] === '1') {
-			// Cache
+		if (isset($settings['cache']) && $settings['cache'] === '1' && $route !== 'product/search') {
+			// Cache except search page
 			$store_id 		= (int) $this->config->get('config_store_id');
 			$language_id 	= (int) $this->config->get('config_language_id');
 			$cachePrefix = explode('/', $route)[1] ?? $route;
@@ -36,8 +36,6 @@ class ControllerExtensionModuleFacetFilter extends Controller {
 			// No cache 
 			$data['filter_sets'] = $this->getFilterSets();
 		}
-
-		$data['filter_sets'] = $this->getFilterSets();
 		
 		// Request data to check applied filters
 		$data['requests'] = [
