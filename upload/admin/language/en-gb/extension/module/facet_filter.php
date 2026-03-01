@@ -3,7 +3,7 @@
 $_['heading_title']    = 'Facet filter';
 
 // Text
-$_['text_success']     = 'Success: You have modified filter module!';
+$_['text_success']     = 'Filter settings saved';
 $_['text_edit']        = 'Settings';
 
 $_['text_manufacturer_settings']  = 'Manufacturer settings';
